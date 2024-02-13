@@ -75,10 +75,10 @@
 		{
 			string userId = GetUserId();
 
-			IEnumerable<JoinedEventVM> joinedEvents = await context.EventsParticipants
+			IEnumerable<AllEventsVM> joinedEvents = await context.EventsParticipants
 				.Where(o => o.HelperId == userId)
 				.AsNoTracking()
-				.Select(e => new JoinedEventVM()
+				.Select(e => new AllEventsVM()
 				{
 					Id = e.EventId,
 					Name = e.Event.Name,
@@ -130,20 +130,23 @@
 		public async Task<IActionResult> Join(int id)
 		{
 			var selectedEvent = await context.Events
-				.FirstAsync(e => e.Id == id);
+				.Include(e => e.EventsParticipants)
+				.FirstOrDefaultAsync(e => e.Id == id);
+
+			if (selectedEvent == null)
+			{
+				return BadRequest();
+			}
 
 			var userId = base.GetUserId();
 
-			EventParticipant ep = new EventParticipant()
+			if (!selectedEvent.EventsParticipants.Any(e => e.HelperId == userId))
 			{
-				HelperId = userId,
-				EventId = selectedEvent.Id,
-			};
-
-			if (!context.EventsParticipants.Any(e => e.HelperId == userId &&
-													 e.EventId == id))
-			{
-				selectedEvent.EventsParticipants.Add(ep);
+				selectedEvent.EventsParticipants
+					.Add(new EventParticipant()
+					{
+						HelperId = userId,
+					});
 				await context.SaveChangesAsync();
 				return RedirectToAction("Joined", "Event");
 			}

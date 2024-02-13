@@ -1,15 +1,20 @@
-﻿namespace Homies.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Homies.Models
 {
     public class AllEventsVM
     {
-        public int Id { get; set; }
+		public int Id { get; set; }
 
-        public string Name { get; set; }
+		[Required(ErrorMessage = "Name is required")]
+		public string Name { get; set; }
 
-        public string Start { get; set; }
+		[Required(ErrorMessage = "Start date and time are required")]
+		public string Start { get; set; }
 
-        public string Type { get; set; }
+		[Required(ErrorMessage = "Type is required")]
+		public string Type { get; set; }
 
-        public string Organiser { get; set; }
-    }
+		public string Organiser { get; set; }
+	}
 }
