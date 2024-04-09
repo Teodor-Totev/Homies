@@ -30,11 +30,6 @@ In the development of this project, I've utilized the following tools and techno
 - Established relationships between entities.
 - Configured database context and ensured proper data persistence.
 
-### Page Requirements
-
-- Index, Login, Register, Event/All, Event/Joined, Event/Add, Event/Edit, Event/Join, Event/Leave, and Bonus Event/Details.
-- Implemented appropriate functionality and redirections as per requirements.
-
 ### Functionality
 
 - Guests can register, log in, and view the index page.
